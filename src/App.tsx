@@ -3,17 +3,13 @@ import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import * as Yup from "yup";
-import { Data, todos } from "./API/todos";
+import { todos } from "./API/todos";
+import { Todo } from "./types/types";
 
 function App() {
-  interface Todo {
-    id: number;
-    text: string;
-    isCompleted: boolean;
-  }
   const [todoList, setTodoList] = useState<Todo[]>([]);
 
-  const initialValues = {
+  const initialValues: any = {
     text: "",
     isCompleted: false,
   };
@@ -27,7 +23,7 @@ function App() {
     setTodoList(data.data);
   };
 
-  const handleSubmit = async (values: object) => {
+  const handleSubmit = async (values: any) => {
     const data = await todos.postTodo(values);
     if (data.status === 201) {
       toast.success("Successfully todo add...");
@@ -106,9 +102,7 @@ function App() {
         <ul className="list-group my-5">
           {todoList.map((todo: Todo) => (
             <li
-              className={`list-group-item d-flex align-items-center ${
-                todo.isCompleted ? "text-decoration-line-through text-success" : ""
-              }`}
+              className="list-group-item d-flex align-items-center"
               key={todo.id}
             >
               <input
@@ -118,7 +112,13 @@ function App() {
                 type="checkbox"
                 data-todo-id={todo.id}
               />
-              <span>
+              <span
+                className={
+                  todo.isCompleted
+                    ? "text-decoration-line-through text-success"
+                    : ""
+                }
+              >
                 {todo.id}. {todo.text}
               </span>
               <button
